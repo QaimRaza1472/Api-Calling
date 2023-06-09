@@ -1,35 +1,35 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:get/get.dart';
+import 'Getx/my_screen.dart';
+import 'Getx/my_services.dart';
 
 void main() {
-// to remove top  shadow or small bar  on the screen
-
-  /*  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-  ),
-  );*/
-
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+   MyApp({super.key});
+
+
+  final MyServices my_service =Get.put(MyServices());
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+        home: MyScreen(),
+      //home: const MyHomePage(),
     );
   }
 }
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -121,6 +121,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+
+
   void loadUserList() async {
     setState(() {
       _loading = true;
@@ -128,12 +130,14 @@ class _MyHomePageState extends State<MyHomePage> {
     var res = await http.get(Uri.https('dummyjson.com', 'users'));
     if (res.statusCode == 200) {
       var jsonData = jsonDecode(res.body);
+
       setState(() {
         _users = jsonData['users'];
         _loading = false;
         print("##############################");
         print(_users);
       });
+
     }
   }
 }
